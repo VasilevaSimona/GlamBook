@@ -1,0 +1,372 @@
+﻿@model GlamBook.Application.DTOs.SalonDto
+
+<style>
+    .salon-form-wrap {
+        padding: 48px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .form-hero {
+        margin-bottom: 40px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid rgba(233,30,140,0.12);
+    }
+
+        .form-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 52px;
+            font-weight: 300;
+            color: #2d1a24;
+            line-height: 1;
+        }
+
+            .form-hero h1 em {
+                font-style: italic;
+                color: #e91e8c;
+            }
+
+    .form-hero-sub {
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+        margin-top: 8px;
+    }
+
+    .form-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 4px 24px rgba(45,26,36,0.06);
+        padding: 40px;
+        margin-bottom: 24px;
+    }
+
+    .form-card-title {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+        margin-bottom: 24px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid rgba(233,30,140,0.08);
+    }
+
+    .field-label {
+        display: block;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+        margin-bottom: 8px;
+    }
+
+    .field-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid rgba(233,30,140,0.2);
+        border-radius: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 13px;
+        background: #fdf7f4;
+        color: #2d1a24;
+        transition: border-color 0.3s, box-shadow 0.3s;
+        outline: none;
+    }
+
+        .field-input:focus {
+            border-color: #e91e8c;
+            box-shadow: 0 0 0 3px rgba(233,30,140,0.1);
+        }
+
+    .field-select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid rgba(233,30,140,0.2);
+        border-radius: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 13px;
+        background: #fdf7f4;
+        color: #2d1a24;
+        outline: none;
+    }
+
+    .field-group {
+        margin-bottom: 20px;
+    }
+
+    .current-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 1px solid rgba(233,30,140,0.15);
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .services-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .services-title {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+    }
+
+    .add-service-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 18px;
+        border-radius: 100px;
+        border: 1px solid rgba(233,30,140,0.3);
+        background: rgba(233,30,140,0.04);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #e91e8c;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .add-service-btn:hover {
+            background: #e91e8c;
+            border-color: #e91e8c;
+            color: #fff;
+        }
+
+    .service-row {
+        background: #fdf7f4;
+        border: 1px solid rgba(233,30,140,0.1);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 12px;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1.5fr auto;
+        gap: 12px;
+        align-items: end;
+    }
+
+        .service-row label {
+            display: block;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #9a7080;
+            margin-bottom: 6px;
+        }
+
+        .service-row input, .service-row select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid rgba(233,30,140,0.2);
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            background: #fff;
+            color: #2d1a24;
+            outline: none;
+        }
+
+    .remove-service {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid rgba(220,53,69,0.3);
+        background: rgba(220,53,69,0.04);
+        color: #dc3545;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.2s;
+    }
+
+        .remove-service:hover {
+            background: #dc3545;
+            border-color: #dc3545;
+            color: #fff;
+        }
+
+    .submit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #e91e8c;
+        color: #fff;
+        padding: 14px 36px;
+        border-radius: 100px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+        .submit-btn:hover {
+            background: #ff4db0;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(233,30,140,0.4);
+        }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #9a7080;
+        text-decoration: none;
+        transition: color 0.3s;
+        margin-left: 16px;
+    }
+
+        .back-link:hover {
+            color: #e91e8c;
+        }
+</style>
+
+<div class="salon-form-wrap">
+    <div class="form-hero">
+        <h1>Edit <em>Salon</em></h1>
+        <p class="form-hero-sub">Update salon details</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-card">
+            <div class="form-card-title">Salon Details</div>
+            <div class="field-group">
+                <label class="field-label">Salon Name</label>
+                <input asp-for="Name" class="field-input" />
+            </div>
+            <div class="field-group">
+                <label class="field-label">Address</label>
+                <input asp-for="Address" class="field-input" />
+            </div>
+            <div class="field-group">
+                <label class="field-label">Description</label>
+                <textarea asp-for="Description" class="field-input" rows="3"></textarea>
+            </div>
+            <div class="field-group">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <label class="field-label">Current Image</label>
+                    <img src="@Model.ImageUrl" class="current-img" />
+                }
+                <label class="field-label">Replace Image</label>
+                <input type="file" name="image" class="field-input" />
+            </div>
+            <div class="field-group">
+                <label class="field-label">Manager</label>
+                <select asp-for="ManagerUserId" class="field-select">
+                    <option value="">— No Manager —</option>
+                    @foreach (var user in (IEnumerable<GlamBook.Domain.Entities.AppUser>)ViewBag.Users)
+                    {
+                        <option value="@user.Id" selected="@(user.Id == Model.ManagerUserId ? "selected" : null)">
+                            @user.Email
+                        </option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-card">
+            <div class="services-header">
+                <span class="services-title">Services</span>
+                <button type="button" class="add-service-btn" id="addService">+ Add Service</button>
+            </div>
+            <div id="servicesContainer">
+                @for (int i = 0; i < Model.Services.Count; i++)
+                {
+                    <div class="service-row">
+                        <input type="hidden" name="Services[@i].Id" value="@Model.Services[i].Id" />
+                        <div>
+                            <label>Service Name</label>
+                            <input name="Services[@i].Name" value="@Model.Services[i].Name" />
+                        </div>
+                        <div>
+                            <label>Price (€)</label>
+                            <input name="Services[@i].Price" type="number" step="0.01" value="@Model.Services[i].Price" />
+                        </div>
+                        <div>
+                            <label>Duration (min)</label>
+                            <input name="Services[@i].DurationInMinutes" type="number" value="@Model.Services[i].DurationInMinutes" />
+                        </div>
+                        <div>
+                            <label>Category</label>
+                            <select name="Services[@i].CategoryId">
+                                @foreach (var cat in (IEnumerable<GlamBook.Domain.Entities.Category>)ViewBag.Categories)
+                                {
+                                    <option value="@cat.Id" selected="@(cat.Id == Model.Services[i].CategoryId ? "selected" : null)">@cat.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <button type="button" class="remove-service">✕</button>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Save Changes</button>
+        <a asp-action="Index" class="back-link">← Back</a>
+    </form>
+</div>
+
+<script>
+    let serviceIndex = @Model.Services.Count;
+    const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                ((IEnumerable<GlamBook.Domain.Entities.Category>)ViewBag.Categories)
+                .Select(c => new { id = c.Id, name = c.Name })
+        ));
+
+    document.getElementById('addService').addEventListener('click', () => {
+        const opts = categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        const html = `
+            <div class="service-row">
+                <div>
+                    <label>Service Name</label>
+                    <input name="Services[${serviceIndex}].Name" placeholder="e.g. Hair Cut" />
+                </div>
+                <div>
+                    <label>Price (€)</label>
+                    <input name="Services[${serviceIndex}].Price" type="number" step="0.01" placeholder="0.00" />
+                </div>
+                <div>
+                    <label>Duration (min)</label>
+                    <input name="Services[${serviceIndex}].DurationInMinutes" type="number" placeholder="30" />
+                </div>
+                <div>
+                    <label>Category</label>
+                    <select name="Services[${serviceIndex}].CategoryId">${opts}</select>
+                </div>
+                <button type="button" class="remove-service">✕</button>
+            </div>`;
+        document.getElementById('servicesContainer').insertAdjacentHTML('beforeend', html);
+        serviceIndex++;
+    });
+
+    document.getElementById('servicesContainer').addEventListener('click', e => {
+        if (e.target.classList.contains('remove-service'))
+            e.target.closest('.service-row').remove();
+    });
+</script>

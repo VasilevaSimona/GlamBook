@@ -1,0 +1,804 @@
+﻿@model GlamBook.Web.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<style>
+    /* ── HERO ── */
+    .hero {
+        position: relative;
+        height: 100vh;
+        background: url('/images/hero.jpg') center/cover no-repeat;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 70%, transparent 100%);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 0 80px;
+        max-width: 620px;
+    }
+
+    .hero-eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.6);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .hero-eyebrow::before {
+            content: '';
+            display: block;
+            width: 32px;
+            height: 1px;
+            background: rgba(255,255,255,0.4);
+        }
+
+    .hero-content h1 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(52px, 7vw, 88px);
+        font-weight: 300;
+        line-height: 0.95;
+        letter-spacing: -1px;
+        color: #fff;
+        margin-bottom: 28px;
+    }
+
+        .hero-content h1 em {
+            font-style: italic;
+            color: #f48cb6;
+        }
+
+    .hero-content p {
+        font-size: 14px;
+        line-height: 1.8;
+        color: rgba(255,255,255,0.75);
+        margin-bottom: 40px;
+        max-width: 400px;
+        letter-spacing: 0.3px;
+    }
+
+    .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .btn-hero {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #e91e8c;
+        color: #fff;
+        padding: 14px 32px;
+        border-radius: 100px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+        .btn-hero:hover {
+            background: #ff4db0;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 16px 40px rgba(233,30,140,0.45);
+        }
+
+        .btn-hero svg {
+            transition: transform 0.3s;
+        }
+
+        .btn-hero:hover svg {
+            transform: rotate(45deg);
+        }
+
+    .hero-link {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.65);
+        text-decoration: none;
+        transition: color 0.3s;
+        border-bottom: 1px solid rgba(255,255,255,0.3);
+        padding-bottom: 2px;
+    }
+
+        .hero-link:hover {
+            color: #fff;
+            border-color: #fff;
+        }
+
+    /* Scroll indicator */
+    .hero-scroll {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        color: rgba(255,255,255,0.4);
+        font-size: 9px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .hero-scroll-line {
+        width: 1px;
+        height: 40px;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+        animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @@keyframes scrollPulse {
+        0%, 100%
+
+    {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    }
+
+    /* Hero stat pills */
+    .hero-stats {
+        position: absolute;
+        bottom: 48px;
+        right: 80px;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-end;
+    }
+
+    .hero-stat-pill {
+        background: rgba(255,255,255,0.12);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 100px;
+        padding: 8px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .hero-stat-pill .stat-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: #fff;
+            line-height: 1;
+        }
+
+        .hero-stat-pill .stat-lbl {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+        }
+
+    /* ── SECTION SHARED ── */
+    .home-section {
+        padding: 60px 48px;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        margin-bottom: 52px;
+        position: relative;
+    }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #f48cb6, transparent);
+        }
+
+        .section-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(38px, 4vw, 58px);
+            font-weight: 300;
+            line-height: 1;
+            color: #2d1a24;
+        }
+
+            .section-header h2 em {
+                font-style: italic;
+                color: #e91e8c;
+            }
+
+    .section-view-all {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #e91e8c;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: gap 0.3s;
+        padding-bottom: 2px;
+        border-bottom: 1px solid rgba(233,30,140,0.3);
+        white-space: nowrap;
+        margin-bottom: 6px;
+    }
+
+        .section-view-all:hover {
+            gap: 14px;
+            color: #e91e8c;
+            border-color: #e91e8c;
+        }
+
+    /* ── CATEGORY CARDS ── */
+    .categories-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+
+    .cat-home-card {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        aspect-ratio: 3/4;
+        text-decoration: none;
+        display: block;
+        animation: fadeUp 0.6s ease both;
+    }
+
+        .cat-home-card:nth-child(1) {
+            animation-delay: .05s;
+        }
+
+        .cat-home-card:nth-child(2) {
+            animation-delay: .10s;
+        }
+
+        .cat-home-card:nth-child(3) {
+            animation-delay: .15s;
+        }
+
+        .cat-home-card:nth-child(4) {
+            animation-delay: .20s;
+        }
+
+        /* Offset every other card down for visual rhythm */
+        .cat-home-card:nth-child(even) {
+            margin-top: 28px;
+        }
+
+    .cat-home-bg {
+        position: absolute;
+        inset: 0;
+        transition: transform 0.5s ease;
+    }
+
+    .cat-home-card:hover .cat-home-bg {
+        transform: scale(1.06);
+    }
+
+    .cat-home-card:nth-child(4n+1) .cat-home-bg {
+        background: linear-gradient(145deg,#fce4ec,#f48fb1,#e91e8c);
+    }
+
+    .cat-home-card:nth-child(4n+2) .cat-home-bg {
+        background: linear-gradient(145deg,#fff3e0,#ffcc80,#ff9800);
+    }
+
+    .cat-home-card:nth-child(4n+3) .cat-home-bg {
+        background: linear-gradient(145deg,#e8f5e9,#a5d6a7,#43a047);
+    }
+
+    .cat-home-card:nth-child(4n+4) .cat-home-bg {
+        background: linear-gradient(145deg,#e3f2fd,#90caf9,#1e88e5);
+    }
+
+    .cat-home-blob {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.35;
+        background: rgba(255,255,255,0.5);
+        bottom: -40px;
+        right: -40px;
+        width: 160px;
+        height: 160px;
+        transition: transform 0.5s ease;
+        pointer-events: none;
+    }
+
+    .cat-home-card:hover .cat-home-blob {
+        transform: scale(1.2);
+    }
+
+    .cat-home-content {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 24px 20px;
+    }
+
+    .cat-home-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 28px;
+        font-weight: 400;
+        color: #fff;
+        line-height: 1;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    }
+
+    .cat-home-explore {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.85);
+        transition: gap 0.3s;
+    }
+
+    .cat-home-card:hover .cat-home-explore {
+        gap: 12px;
+    }
+
+    .cat-home-arrow {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.25);
+        border: 1px solid rgba(255,255,255,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s, transform 0.3s;
+    }
+
+    .cat-home-card:hover .cat-home-arrow {
+        background: rgba(255,255,255,0.4);
+        transform: rotate(45deg);
+    }
+
+    /* ── SALON CARDS ── */
+    .salons-bg-section {
+        background: #faf4f7;
+        padding: 60px 48px;
+    }
+
+    .salons-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .salon-home-card {
+        background: #fff;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(45,26,36,0.06);
+        transition: transform 0.35s, box-shadow 0.35s;
+        display: flex;
+        flex-direction: column;
+        animation: fadeUp 0.6s ease both;
+    }
+
+        .salon-home-card:nth-child(1) {
+            animation-delay: .05s;
+        }
+
+        .salon-home-card:nth-child(2) {
+            animation-delay: .10s;
+        }
+
+        .salon-home-card:nth-child(3) {
+            animation-delay: .15s;
+        }
+
+        .salon-home-card:nth-child(4) {
+            animation-delay: .20s;
+        }
+
+        .salon-home-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 44px rgba(233,30,140,0.12);
+        }
+
+    .salon-home-img {
+        position: relative;
+        height: 190px;
+        overflow: hidden;
+    }
+
+        .salon-home-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+
+    .salon-home-card:hover .salon-home-img img {
+        transform: scale(1.06);
+    }
+
+    .salon-home-img::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(to top, rgba(255,255,255,0.8), transparent);
+        pointer-events: none;
+    }
+
+    .salon-home-body {
+        padding: 18px 18px 22px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .salon-home-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        font-weight: 400;
+        color: #2d1a24;
+        margin-bottom: 4px;
+        line-height: 1.1;
+    }
+
+    .salon-home-divider {
+        height: 1px;
+        background: linear-gradient(90deg, #fce4f3, transparent);
+        margin: 12px 0;
+    }
+
+    .salon-home-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #e91e8c;
+        text-decoration: none;
+        transition: gap 0.3s;
+        margin-top: auto;
+    }
+
+        .salon-home-btn:hover {
+            gap: 10px;
+            color: #e91e8c;
+        }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+        padding: 60px 48px;
+        background: #1a0a12;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .how-section::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(233,30,140,0.15) 0%, transparent 70%);
+            left: -200px;
+            top: -200px;
+            pointer-events: none;
+        }
+
+        .how-section::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(233,30,140,0.1) 0%, transparent 70%);
+            right: -100px;
+            bottom: -100px;
+            pointer-events: none;
+        }
+
+        .how-section .section-header h2 {
+            color: #fff;
+        }
+
+            .how-section .section-header h2 em {
+                color: #f48cb6;
+            }
+
+    .how-steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+        position: relative;
+        z-index: 1;
+    }
+
+        /* Connecting line between steps */
+        .how-steps::before {
+            content: '';
+            position: absolute;
+            top: 28px;
+            left: calc(16.66% + 20px);
+            right: calc(16.66% + 20px);
+            height: 1px;
+            background: linear-gradient(90deg, rgba(233,30,140,0.4), rgba(233,30,140,0.2), rgba(233,30,140,0.4));
+        }
+
+    .how-step {
+        animation: fadeUp 0.6s ease both;
+    }
+
+        .how-step:nth-child(1) {
+            animation-delay: .1s;
+        }
+
+        .how-step:nth-child(2) {
+            animation-delay: .2s;
+        }
+
+        .how-step:nth-child(3) {
+            animation-delay: .3s;
+        }
+
+    .how-step-num {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 1px solid rgba(233,30,140,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 28px;
+        position: relative;
+        background: rgba(233,30,140,0.08);
+    }
+
+        .how-step-num span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 300;
+            color: #f48cb6;
+        }
+
+    .how-step h4 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 26px;
+        font-weight: 400;
+        color: #fff;
+        margin-bottom: 12px;
+        line-height: 1.1;
+    }
+
+    .how-step p {
+        font-size: 12px;
+        color: rgba(255,255,255,0.45);
+        line-height: 1.8;
+        letter-spacing: 0.3px;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 991px) {
+        .home-section, .salons-bg-section, .how-section {
+            padding: 60px 24px;
+        }
+
+        .categories-row, .salons-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .how-steps {
+            grid-template-columns: 1fr;
+        }
+
+            .how-steps::before {
+                display: none;
+            }
+
+        .cat-home-card:nth-child(even) {
+            margin-top: 0;
+        }
+
+        .hero-stats {
+            display: none;
+        }
+
+        .hero-content {
+            padding: 0 32px;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .categories-row, .salons-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<!-- ── HERO ── -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+        <h1>Book Your<br><em>Perfect</em><br>Moment</h1>
+        <p>Discover the finest beauty salons and book your appointment in seconds.</p>
+        <div class="hero-actions">
+            <a class="btn-hero" asp-controller="Categories" asp-action="Index">
+                Book Now
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+            </a>
+            <a class="hero-link" asp-controller="Salons" asp-action="Index">Explore Salons</a>
+        </div>
+    </div>
+
+    <div class="hero-stats">
+        <div class="hero-stat-pill">
+            <span class="stat-num">@Model.Salons.Count()</span>
+            <span class="stat-lbl">Salons</span>
+        </div>
+        <div class="hero-stat-pill">
+            <span class="stat-num">@Model.Categories.Count()</span>
+            <span class="stat-lbl">Categories</span>
+        </div>
+    </div>
+
+    <div class="hero-scroll">
+        <div class="hero-scroll-line"></div>
+        scroll
+    </div>
+</section>
+
+<!-- ── CATEGORIES ── -->
+<section class="home-section">
+    <div class="section-header">
+        <h2>Browse by<br><em>Category</em></h2>
+        <a asp-controller="Categories" asp-action="Index" class="section-view-all">
+            View all
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M1.5 8.5L8.5 1.5M8.5 1.5H3M8.5 1.5V7" stroke="#e91e8c" stroke-width="1.4" stroke-linecap="round" />
+            </svg>
+        </a>
+    </div>
+
+    <div class="categories-row">
+        @foreach (var category in Model.Categories.Take(4))
+        {
+            <a asp-controller="Salons"
+               asp-action="Index"
+               asp-route-categoryId="@category.Id"
+               class="cat-home-card">
+                <div class="cat-home-bg"></div>
+                <div class="cat-home-blob"></div>
+                <div class="cat-home-content">
+                    <div class="cat-home-name">@category.Name</div>
+                    <div class="cat-home-explore">
+                        Explore
+                        <span class="cat-home-arrow">
+                            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                <path d="M1.5 8.5L8.5 1.5M8.5 1.5H3M8.5 1.5V7" stroke="white" stroke-width="1.4" stroke-linecap="round" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</section>
+
+<!-- ── SALONS ── -->
+<section class="salons-bg-section">
+    <div class="section-header">
+        <h2>Featured<br><em>Salons</em></h2>
+        <a asp-controller="Salons" asp-action="Index" class="section-view-all">
+            View all
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M1.5 8.5L8.5 1.5M8.5 1.5H3M8.5 1.5V7" stroke="#e91e8c" stroke-width="1.4" stroke-linecap="round" />
+            </svg>
+        </a>
+    </div>
+
+    <div class="salons-row">
+        @foreach (var salon in Model.Salons.Take(4))
+        {
+            <div class="salon-home-card">
+                <div class="salon-home-img">
+                    <img src="@salon.ImageUrl" alt="@salon.Name" loading="lazy" />
+                </div>
+                <div class="salon-home-body">
+                    <div class="salon-home-name">@salon.Name</div>
+                    <div class="salon-home-divider"></div>
+                    <a asp-area=""
+                        asp-controller="Services"
+                       asp-action="Index"
+                       asp-route-salonId="@salon.Id"
+                       class="salon-home-btn">
+                        View Services
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                            <path d="M1.5 8.5L8.5 1.5M8.5 1.5H3M8.5 1.5V7" stroke="#e91e8c" stroke-width="1.4" stroke-linecap="round" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="how-section">
+    <div class="section-header">
+        <h2>How <em>GlamBook</em><br>Works</h2>
+    </div>
+
+    <div class="how-steps">
+        <div class="how-step">
+            <div class="how-step-num"><span>01</span></div>
+            <h4>Choose a Category</h4>
+            <p>Browse through our beauty categories — hair, face, body, and more — to find exactly what you need.</p>
+        </div>
+        <div class="how-step">
+            <div class="how-step-num"><span>02</span></div>
+            <h4>Pick a Salon</h4>
+            <p>Discover top-rated salons near you and explore their full range of services and pricing.</p>
+        </div>
+        <div class="how-step">
+            <div class="how-step-num"><span>03</span></div>
+            <h4>Book an Appointment</h4>
+            <p>Select your preferred time slot and confirm your booking instantly — no calls needed.</p>
+        </div>
+    </div>
+</section>

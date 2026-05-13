@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GlamBook Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background: #fdf7f4; color: #2d1a24; margin: 0; }
+
+        .manager-nav {
+            position: sticky; top: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 48px; height: 70px;
+            background: rgba(253,247,244,0.92);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(233,30,140,0.12);
+        }
+
+        .manager-nav .nav-links {
+            display: flex; gap: 36px; list-style: none; margin: 0; padding: 0;
+        }
+
+        .manager-nav .nav-links a {
+            font-size: 11px; font-weight: 600; letter-spacing: 2px;
+            text-transform: uppercase; text-decoration: none;
+            color: #2d1a24; transition: color 0.3s;
+            position: relative; padding-bottom: 4px;
+        }
+
+        .manager-nav .nav-links a::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+            height: 1px; background: currentColor;
+            transform: scaleX(0); transform-origin: left; transition: transform 0.3s ease;
+        }
+
+        .manager-nav .nav-links a:hover { color: #e91e8c; }
+        .manager-nav .nav-links a:hover::after,
+        .manager-nav .nav-links a.nav-active::after { transform: scaleX(1); }
+        .manager-nav .nav-links a.nav-active { color: #e91e8c; }
+
+        .manager-nav .nav-brand {
+            font-family: 'Montserrat', sans-serif; font-size: 20px;
+            font-weight: 700; letter-spacing: 4px;
+            text-decoration: none; color: #2d1a24;
+        }
+
+        .manager-nav .nav-auth {
+            display: flex; align-items: center; gap: 16px;
+            font-size: 11px; color: #2d1a24;
+        }
+
+        .manager-nav .auth-cta {
+            font-weight: 700; letter-spacing: 2px; font-size: 11px;
+            text-decoration: none; color: #e91e8c;
+        }
+
+        .manager-badge {
+            display: inline-flex; align-items: center;
+            background: rgba(233,30,140,0.08);
+            border: 1px solid rgba(233,30,140,0.2);
+            border-radius: 100px; padding: 3px 12px;
+            font-size: 9px; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; color: #e91e8c;
+        }
+
+        .page-wrapper { min-height: calc(100vh - 70px); }
+    </style>
+</head>
+<body>
+
+    @{
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    }
+
+    <nav class="manager-nav">
+        <ul class="nav-links">
+            <li>
+                <a asp-area="Manager" asp-controller="Appointments" asp-action="Index"
+                   class="@(currentController == "Appointments" ? "nav-active" : "")">
+                    Appointments
+                </a>
+            </li>
+            <li>
+                <a asp-area="Manager" asp-controller="Services" asp-action="Index"
+                   class="@(currentController == "Services" ? "nav-active" : "")">
+                    Services
+                </a>
+            </li>
+        </ul>
+
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-brand">
+            GLAMBOOK <span class="manager-badge">Manager</span>
+        </a>
+
+        <div class="nav-auth">
+            <span>@User.Identity?.Name</span>
+            <a asp-area="Identity" asp-page="/Account/Logout" class="auth-cta">Logout</a>
+        </div>
+    </nav>
+
+    <div class="page-wrapper">
+        @RenderBody()
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

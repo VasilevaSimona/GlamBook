@@ -1,0 +1,197 @@
+﻿@model IEnumerable<GlamBook.Domain.Entities.Service>
+
+<style>
+    .mgr-hero {
+        padding: 48px 48px 32px;
+        border-bottom: 1px solid rgba(233,30,140,0.12);
+        margin-bottom: 40px;
+    }
+
+        .mgr-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 52px;
+            font-weight: 300;
+            color: #2d1a24;
+            line-height: 1;
+        }
+
+            .mgr-hero h1 em {
+                font-style: italic;
+                color: #e91e8c;
+            }
+
+    .mgr-hero-sub {
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+        margin-top: 8px;
+    }
+
+    .mgr-wrap {
+        padding: 0 48px 80px;
+    }
+
+    .mgr-add-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #e91e8c;
+        color: #fff;
+        padding: 12px 28px;
+        border-radius: 100px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.3s;
+        margin-bottom: 32px;
+    }
+
+        .mgr-add-btn:hover {
+            background: #ff4db0;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+    .mgr-table-wrap {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 4px 24px rgba(45,26,36,0.06);
+        overflow: hidden;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead th {
+        padding: 14px 20px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #9a7080;
+        background: #fdf7f4;
+        text-align: left;
+        border-bottom: 1px solid rgba(233,30,140,0.08);
+    }
+
+    tbody tr {
+        border-bottom: 1px solid rgba(233,30,140,0.06);
+        transition: background 0.2s;
+    }
+
+        tbody tr:hover {
+            background: #fdf7f4;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+    tbody td {
+        padding: 16px 20px;
+        font-size: 13px;
+        color: #2d1a24;
+        vertical-align: middle;
+    }
+
+    .td-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 20px;
+    }
+
+    .price-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(233,30,140,0.06);
+        border: 1px solid rgba(233,30,140,0.2);
+        border-radius: 100px;
+        padding: 4px 12px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #e91e8c;
+    }
+
+    .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 7px 14px;
+        border-radius: 100px;
+        border: 1px solid rgba(233,30,140,0.3);
+        background: rgba(233,30,140,0.04);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #e91e8c;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-delete:hover {
+            background: #e91e8c;
+            border-color: #e91e8c;
+            color: #fff;
+        }
+
+    .empty-row td {
+        text-align: center;
+        padding: 60px 20px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        font-style: italic;
+        color: #9a7080;
+    }
+</style>
+
+<div class="mgr-hero">
+    <h1>@ViewBag.SalonName — <em>Services</em></h1>
+    <p class="mgr-hero-sub">Manage your salon services</p>
+</div>
+
+<div class="mgr-wrap">
+    <a asp-area="Manager" asp-controller="Services" asp-action="Create" class="mgr-add-btn">
+        + Add Service
+    </a>
+
+    <div class="mgr-table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Price</th>
+                    <th>Duration</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr class="empty-row"><td colspan="4">No services yet</td></tr>
+                }
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td><div class="td-name">@s.Name</div></td>
+                        <td><span class="price-pill">@s.Price.ToString("0.00") €</span></td>
+                        <td>@s.Duration.TotalMinutes min</td>
+                        <td>
+                            <form asp-area="Manager" asp-controller="Services"
+                                  asp-action="Delete" method="post" style="display:inline">
+                                <input type="hidden" name="id" value="@s.Id" />
+                                <button type="submit" class="btn-delete">✕ Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

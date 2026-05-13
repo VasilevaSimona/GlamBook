@@ -1,0 +1,375 @@
+﻿@model IEnumerable<GlamBook.Application.DTOs.ServiceDto>
+
+<style>
+    /* ── HERO ── */
+    .services-hero {
+        padding: 80px 48px 60px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        position: relative;
+    }
+
+        .services-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 48px;
+            right: 48px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #f48cb6, transparent);
+        }
+
+        .services-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(52px, 7vw, 96px);
+            font-weight: 300;
+            line-height: 0.9;
+            letter-spacing: -1px;
+            color: #2d1a24;
+        }
+
+            .services-hero h1 em {
+                font-style: italic;
+                color: #e91e8c;
+            }
+
+    .services-hero-sub {
+        margin-top: 20px;
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+        font-weight: 500;
+    }
+
+    .services-hero-stat {
+        text-align: right;
+        opacity: .45;
+    }
+
+        .services-hero-stat .num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 72px;
+            font-weight: 300;
+            line-height: 1;
+            color: #2d1a24;
+        }
+
+        .services-hero-stat .lbl {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #9a7080;
+        }
+
+    /* ── GRID ── */
+    .services-grid {
+        padding: 52px 48px 80px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    /* ── CARD ── */
+    .service-card {
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 24px rgba(45, 26, 36, 0.06);
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+        display: flex;
+        flex-direction: column;
+        animation: fadeUp 0.6s ease both;
+        position: relative;
+    }
+
+        .service-card:nth-child(1) {
+            animation-delay: .05s;
+        }
+
+        .service-card:nth-child(2) {
+            animation-delay: .10s;
+        }
+
+        .service-card:nth-child(3) {
+            animation-delay: .15s;
+        }
+
+        .service-card:nth-child(4) {
+            animation-delay: .20s;
+        }
+
+        .service-card:nth-child(5) {
+            animation-delay: .25s;
+        }
+
+        .service-card:nth-child(6) {
+            animation-delay: .30s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 48px rgba(233, 30, 140, 0.12);
+        }
+
+        /* Coloured top accent bar — cycles through palette */
+        .service-card::before {
+            content: '';
+            display: block;
+            height: 4px;
+            width: 100%;
+        }
+
+        .service-card:nth-child(6n+1)::before {
+            background: linear-gradient(90deg, #fce4ec, #e91e8c);
+        }
+
+        .service-card:nth-child(6n+2)::before {
+            background: linear-gradient(90deg, #fff3e0, #ff9800);
+        }
+
+        .service-card:nth-child(6n+3)::before {
+            background: linear-gradient(90deg, #e8f5e9, #43a047);
+        }
+
+        .service-card:nth-child(6n+4)::before {
+            background: linear-gradient(90deg, #e3f2fd, #1e88e5);
+        }
+
+        .service-card:nth-child(6n+5)::before {
+            background: linear-gradient(90deg, #f3e5f5, #8e24aa);
+        }
+
+        .service-card:nth-child(6n+6)::before {
+            background: linear-gradient(90deg, #e0f2f1, #00897b);
+        }
+
+    .service-body {
+        padding: 28px 28px 24px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Index number */
+    .service-index {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 12px;
+        color: #d4b8c4;
+        letter-spacing: 2px;
+        margin-bottom: 14px;
+    }
+
+    .service-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 30px;
+        font-weight: 400;
+        color: #2d1a24;
+        line-height: 1.1;
+        margin-bottom: 10px;
+    }
+
+    .service-desc {
+        font-size: 12px;
+        color: #9a7080;
+        line-height: 1.7;
+        margin-bottom: 0;
+        flex: 1;
+    }
+
+    /* Divider */
+    .service-divider {
+        height: 1px;
+        background: linear-gradient(90deg, #fce4f3, transparent);
+        margin: 20px 0;
+    }
+
+    /* Meta pills */
+    .service-meta {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 22px;
+        flex-wrap: wrap;
+    }
+
+    .service-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #fdf7f4;
+        border: 1px solid rgba(233, 30, 140, 0.15);
+        border-radius: 100px;
+        padding: 5px 14px;
+        font-size: 11px;
+        font-weight: 600;
+        color: #2d1a24;
+        letter-spacing: 0.5px;
+    }
+
+        .service-pill svg {
+            opacity: 0.5;
+            flex-shrink: 0;
+        }
+
+        .service-pill.price-pill {
+            background: rgba(233, 30, 140, 0.06);
+            border-color: rgba(233, 30, 140, 0.2);
+            color: #e91e8c;
+        }
+
+    /* Book button */
+    .service-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: #e91e8c;
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 100px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.3s;
+        width: 100%;
+    }
+
+        .service-btn:hover {
+            background: #ff4db0;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(233, 30, 140, 0.35);
+        }
+
+        .service-btn svg {
+            transition: transform 0.3s;
+        }
+
+        .service-btn:hover svg {
+            transform: rotate(45deg);
+        }
+
+    /* ── EMPTY STATE ── */
+    .services-empty {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 80px 20px;
+    }
+
+        .services-empty p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 300;
+            font-style: italic;
+            color: #9a7080;
+        }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 991px) {
+        .services-grid {
+            grid-template-columns: repeat(2,1fr);
+            padding: 40px 24px 60px;
+        }
+
+        .services-hero {
+            padding: 60px 24px 40px;
+        }
+
+            .services-hero::after {
+                left: 24px;
+                right: 24px;
+            }
+    }
+
+    @@media (max-width: 600px) {
+        .services-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<!-- HERO -->
+<section class="services-hero">
+    <div>
+        <h1>Our <em>Services</em></h1>
+        <p class="services-hero-sub">Choose your perfect treatment</p>
+    </div>
+    <div class="services-hero-stat">
+        <div class="num">@Model.Count()</div>
+        <div class="lbl">Services available</div>
+    </div>
+</section>
+
+<!-- GRID -->
+<section class="services-grid">
+    @if (!Model.Any())
+    {
+        <div class="services-empty">
+            <p>No services available yet.</p>
+        </div>
+    }
+
+    @{
+        int idx = 0; int total = Model.Count();
+    }
+
+    @foreach (var s in Model)
+    {
+        idx++;
+        <div class="service-card">
+            <div class="service-body">
+                <div class="service-index">@idx.ToString("D2") / @total.ToString("D2")</div>
+                <h3 class="service-name">@s.Name</h3>
+
+                @if (!string.IsNullOrWhiteSpace(s.Description))
+                {
+                    <p class="service-desc">@s.Description</p>
+                }
+
+                <div class="service-divider"></div>
+
+                <div class="service-meta">
+                    <span class="service-pill price-pill">
+                        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                            <circle cx="5.5" cy="5.5" r="4.5" stroke="#e91e8c" stroke-width="1.2" />
+                            <path d="M5.5 3v5M3.5 4h2.5a1 1 0 010 2H3.5" stroke="#e91e8c" stroke-width="1.1" stroke-linecap="round" />
+                        </svg>
+                        @s.Price.ToString("0.00") €
+                    </span>
+                    <span class="service-pill">
+                        <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                            <circle cx="5.5" cy="5.5" r="4.5" stroke="#2d1a24" stroke-width="1.2" />
+                            <path d="M5.5 3v2.5l1.5 1.5" stroke="#2d1a24" stroke-width="1.1" stroke-linecap="round" />
+                        </svg>
+                        @s.DurationInMinutes min
+                    </span>
+                </div>
+
+                <a asp-controller="Appointment" asp-action="Book"
+                   asp-route-salonId="@s.SalonId"
+                   asp-route-serviceId="@s.Id"
+                   class="service-btn">
+                    Book Now
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                        <path d="M1.5 8.5L8.5 1.5M8.5 1.5H3M8.5 1.5V7" stroke="white" stroke-width="1.4" stroke-linecap="round" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    }
+</section>

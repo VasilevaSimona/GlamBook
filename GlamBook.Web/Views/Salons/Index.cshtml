@@ -1,0 +1,471 @@
+﻿@model IEnumerable<GlamBook.Application.DTOs.SalonDto>
+
+<style>
+    /* ── HERO ── */
+    .salons-hero {
+        padding: 80px 48px 60px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        position: relative;
+    }
+
+        .salons-hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 48px;
+            right: 48px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #f48cb6, transparent);
+        }
+
+        .salons-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(52px, 7vw, 96px);
+            font-weight: 300;
+            line-height: 0.9;
+            letter-spacing: -1px;
+            color: #2d1a24;
+        }
+
+            .salons-hero h1 em {
+                font-style: italic;
+                color: #e91e8c;
+            }
+
+    .salons-hero-sub {
+        margin-top: 20px;
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+        font-weight: 500;
+    }
+
+    .salons-hero-stat {
+        text-align: right;
+        opacity: .45;
+    }
+
+        .salons-hero-stat .num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 72px;
+            font-weight: 300;
+            line-height: 1;
+            color: #2d1a24;
+        }
+
+        .salons-hero-stat .lbl {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #9a7080;
+        }
+
+    /* ── SEARCH BAR ── */
+    .salons-toolbar {
+        padding: 32px 48px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .salon-search-wrap {
+        position: relative;
+        flex: 1;
+        max-width: 380px;
+    }
+
+        .salon-search-wrap svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+    .salon-search {
+        width: 100%;
+        padding: 10px 16px 10px 44px;
+        border-radius: 100px;
+        border: 1px solid rgba(233, 30, 140, 0.25);
+        background: #fff;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        letter-spacing: 1px;
+        color: #2d1a24;
+        outline: none;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+        .salon-search:focus {
+            border-color: #e91e8c;
+            box-shadow: 0 0 0 3px rgba(233, 30, 140, 0.08);
+        }
+
+        .salon-search::placeholder {
+            color: #c4a0b0;
+        }
+
+    .salon-count-label {
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #9a7080;
+        margin-left: auto;
+    }
+
+        .salon-count-label span {
+            color: #e91e8c;
+            font-weight: 700;
+        }
+
+    /* ── GRID ── */
+    .salons-grid {
+        padding: 0 40px 80px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+
+    /* ── CARD ── */
+    .salon-card {
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 24px rgba(45, 26, 36, 0.06);
+        transition: transform 0.35s ease, box-shadow 0.35s ease;
+        display: flex;
+        flex-direction: column;
+        animation: fadeUp 0.6s ease both;
+    }
+
+        .salon-card:nth-child(1) {
+            animation-delay: .05s;
+        }
+
+        .salon-card:nth-child(2) {
+            animation-delay: .10s;
+        }
+
+        .salon-card:nth-child(3) {
+            animation-delay: .15s;
+        }
+
+        .salon-card:nth-child(4) {
+            animation-delay: .20s;
+        }
+
+        .salon-card:nth-child(5) {
+            animation-delay: .25s;
+        }
+
+        .salon-card:nth-child(6) {
+            animation-delay: .30s;
+        }
+
+        .salon-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(233, 30, 140, 0.12);
+        }
+
+    /* Image */
+    .salon-img-wrap {
+        position: relative;
+        height: 240px;
+        overflow: hidden;
+    }
+
+        .salon-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            display: block;
+        }
+
+    .salon-card:hover .salon-img-wrap img {
+        transform: scale(1.06);
+    }
+
+    /* Gradient overlay on image bottom */
+    .salon-img-wrap::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 80px;
+        background: linear-gradient(to top, rgba(255,255,255,0.9), transparent);
+        pointer-events: none;
+    }
+
+    /* Category badge on image */
+    .salon-badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        z-index: 2;
+        background: rgba(255,255,255,0.35);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.6);
+        border-radius: 100px;
+        padding: 4px 12px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #fff;
+        text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Card body */
+    .salon-body {
+        padding: 24px 24px 28px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .salon-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 26px;
+        font-weight: 400;
+        color: #2d1a24;
+        line-height: 1.1;
+        margin-bottom: 8px;
+    }
+
+    .salon-address {
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        color: #9a7080;
+        margin-bottom: 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        line-height: 1.5;
+        flex: 1;
+    }
+
+        .salon-address svg {
+            flex-shrink: 0;
+            margin-top: 1px;
+            opacity: 0.5;
+        }
+
+    /* Divider */
+    .salon-divider {
+        height: 1px;
+        background: linear-gradient(90deg, #fce4f3, transparent);
+        margin: 18px 0;
+    }
+
+    /* Footer row */
+    .salon-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .salon-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #e91e8c;
+        color: #fff;
+        padding: 10px 22px;
+        border-radius: 100px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+
+        .salon-btn:hover {
+            background: #ff4db0;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(233, 30, 140, 0.35);
+        }
+
+        .salon-btn svg {
+            transition: transform 0.3s;
+        }
+
+        .salon-btn:hover svg {
+            transform: rotate(45deg);
+        }
+
+    .salon-index {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 13px;
+        color: #d4b8c4;
+        letter-spacing: 1px;
+    }
+
+    /* ── EMPTY STATE ── */
+    .salons-empty {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 80px 20px;
+        color: #9a7080;
+    }
+
+        .salons-empty p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 28px;
+            font-weight: 300;
+            font-style: italic;
+        }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ── RESPONSIVE ── */
+    @@media (max-width: 991px) {
+        .salons-grid {
+            grid-template-columns: repeat(2, 1fr);
+            padding: 0 24px 60px;
+        }
+
+        .salons-hero, .salons-toolbar {
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+            .salons-hero::after {
+                left: 24px;
+                right: 24px;
+            }
+    }
+
+    @@media (max-width: 600px) {
+        .salons-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<!-- HERO -->
+<section class="salons-hero">
+    <div>
+        <h1>Our <em>Salons</em></h1>
+        <p class="salons-hero-sub">Discover & book your perfect spot</p>
+    </div>
+    <div class="salons-hero-stat">
+        <div class="num">@Model.Count()</div>
+        <div class="lbl">Salons available</div>
+    </div>
+</section>
+
+<!-- TOOLBAR -->
+<div class="salons-toolbar">
+    <div class="salon-search-wrap">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <circle cx="7" cy="7" r="5" stroke="#2d1a24" stroke-width="1.5" />
+            <path d="M11 11L14 14" stroke="#2d1a24" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        <input class="salon-search" id="salonSearch" type="text"
+               placeholder="Search salons or cities…" autocomplete="off" />
+    </div>
+    <span class="salon-count-label">
+        <span id="visibleCount">@Model.Count()</span> salons found
+    </span>
+</div>
+
+<!-- GRID -->
+<section class="salons-grid" id="salonsGrid">
+    @{
+        int idx = 0;
+        int total = Model.Count();
+    }
+
+    @foreach (var s in Model)
+    {
+        idx++;
+        <div class="salon-card" data-name="@s.Name.ToLower()" data-address="@s.Address.ToLower()">
+
+            <div class="salon-img-wrap">
+                <img src="@s.ImageUrl" alt="@s.Name" loading="lazy" />
+                <span class="salon-badge">Beauty Salon</span>
+            </div>
+
+            <div class="salon-body">
+                <h3 class="salon-name">@s.Name</h3>
+                <p class="salon-address">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                        <path d="M6 1C4.07 1 2.5 2.57 2.5 4.5C2.5 7.25 6 11 6 11C6 11 9.5 7.25 9.5 4.5C9.5 2.57 7.93 1 6 1Z"
+                              stroke="#2d1a24" stroke-width="1.2" />
+                        <circle cx="6" cy="4.5" r="1.2" stroke="#2d1a24" stroke-width="1.2" />
+                    </svg>
+                    @s.Address
+                </p>
+
+                <div class="salon-divider"></div>
+
+                <div class="salon-footer">
+                    <a  asp-area=""
+                        asp-controller="Services"
+                       asp-action="Index"
+                       asp-route-salonId="@s.Id"
+                       class="salon-btn">
+                        View Services
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                            <path d="M1.5 8.5L8.5 1.5M8.5 1.5H3M8.5 1.5V7"
+                                  stroke="white" stroke-width="1.4" stroke-linecap="round" />
+                        </svg>
+                    </a>
+                    <span class="salon-index">@idx.ToString("D2") / @total.ToString("D2")</span>
+                </div>
+            </div>
+
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="salons-empty">
+            <p>No salons found yet.</p>
+        </div>
+    }
+</section>
+
+@section Scripts {
+    <script>
+        const searchInput = document.getElementById('salonSearch');
+        const cards = document.querySelectorAll('.salon-card');
+        const countEl = document.getElementById('visibleCount');
+
+        searchInput.addEventListener('input', () => {
+            const q = searchInput.value.toLowerCase().trim();
+            let visible = 0;
+
+            cards.forEach(card => {
+                const name    = card.dataset.name    || '';
+                const address = card.dataset.address || '';
+                const match   = !q || name.includes(q) || address.includes(q);
+
+                card.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+
+            countEl.textContent = visible;
+        });
+    </script>
+}

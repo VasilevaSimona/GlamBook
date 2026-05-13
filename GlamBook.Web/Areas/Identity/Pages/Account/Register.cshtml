@@ -1,0 +1,422 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register — GlamBook</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #1a0a12;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+            body::before {
+                content: '';
+                position: absolute;
+                width: 600px;
+                height: 600px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(233,30,140,0.18) 0%, transparent 70%);
+                top: -200px;
+                left: -200px;
+                pointer-events: none;
+            }
+
+            body::after {
+                content: '';
+                position: absolute;
+                width: 400px;
+                height: 400px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(233,30,140,0.12) 0%, transparent 70%);
+                bottom: -100px;
+                right: -100px;
+                pointer-events: none;
+            }
+
+        .register-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 960px;
+            width: 100%;
+            margin: 24px;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* LEFT PANEL */
+        .register-left {
+            background: linear-gradient(145deg, #2d0a1e, #1a0a12);
+            padding: 64px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            border-right: 1px solid rgba(233,30,140,0.15);
+        }
+
+            .register-left::before {
+                content: '';
+                position: absolute;
+                width: 300px;
+                height: 300px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(233,30,140,0.2) 0%, transparent 70%);
+                bottom: -80px;
+                right: -80px;
+                pointer-events: none;
+            }
+
+        .register-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: #fff;
+            text-decoration: none;
+        }
+
+            .register-brand span {
+                color: #e91e8c;
+            }
+
+        .register-left-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        .register-left-eyebrow {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #e91e8c;
+            margin-bottom: 16px;
+        }
+
+        .register-left h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 52px;
+            font-weight: 300;
+            line-height: 1;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+            .register-left h2 em {
+                font-style: italic;
+                color: #f48cb6;
+            }
+
+        .register-left p {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.8;
+            max-width: 260px;
+        }
+
+        .register-perks {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .register-perk {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .perk-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #e91e8c;
+            flex-shrink: 0;
+        }
+
+        .register-left-footer {
+            font-size: 10px;
+            color: rgba(255,255,255,0.2);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* RIGHT PANEL */
+        .register-right {
+            background: #fdf7f4;
+            padding: 64px 52px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .register-eyebrow {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #e91e8c;
+            margin-bottom: 12px;
+        }
+
+        .register-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 40px;
+            font-weight: 300;
+            color: #2d1a24;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+            .register-title em {
+                font-style: italic;
+                color: #e91e8c;
+            }
+
+        .register-sub {
+            font-size: 12px;
+            color: #9a7080;
+            margin-bottom: 32px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-field {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #9a7080;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(233,30,140,0.2);
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            background: #fff;
+            color: #2d1a24;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+
+            .form-input:focus {
+                border-color: #e91e8c;
+                box-shadow: 0 0 0 3px rgba(233,30,140,0.1);
+            }
+
+            .form-input.input-validation-error {
+                border-color: #dc3545;
+            }
+
+        .text-danger {
+            color: #dc3545;
+            font-size: 11px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .validation-summary-errors {
+            background: rgba(220,53,69,0.08);
+            border: 1px solid rgba(220,53,69,0.2);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            color: #dc3545;
+            font-size: 12px;
+        }
+
+            .validation-summary-errors ul {
+                margin: 0;
+                padding-left: 16px;
+            }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: #e91e8c;
+            color: #fff;
+            border: none;
+            border-radius: 100px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+            margin-bottom: 24px;
+        }
+
+            .submit-btn:hover {
+                background: #ff4db0;
+                transform: translateY(-2px);
+                box-shadow: 0 12px 32px rgba(233,30,140,0.4);
+            }
+
+        .register-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(233,30,140,0.2), transparent);
+            margin-bottom: 24px;
+        }
+
+        .register-links {
+            text-align: center;
+        }
+
+            .register-links p {
+                font-size: 12px;
+                color: #9a7080;
+                margin-bottom: 8px;
+            }
+
+            .register-links a {
+                color: #e91e8c;
+                text-decoration: none;
+                font-weight: 600;
+                transition: color 0.3s;
+            }
+
+                .register-links a:hover {
+                    color: #c0156e;
+                }
+
+        @@media (max-width: 768px) {
+            .register-wrap {
+                grid-template-columns: 1fr;
+                margin: 16px;
+            }
+
+            .register-left {
+                display: none;
+            }
+
+            .register-right {
+                padding: 48px 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-wrap">
+
+        <!-- LEFT -->
+        <div class="register-left">
+            <a href="/" class="register-brand">GLAM<span>BOOK</span></a>
+
+            <div class="register-left-body">
+                <div class="register-left-eyebrow">Get started</div>
+                <h2>Join<br><em>GlamBook</em><br>Today</h2>
+                <p>Create your account and start booking beauty appointments with the best salons near you.</p>
+
+                <div class="register-perks">
+                    <div class="register-perk">
+                        <span class="perk-dot"></span>
+                        <span>Book appointments instantly</span>
+                    </div>
+                    <div class="register-perk">
+                        <span class="perk-dot"></span>
+                        <span>Discover top-rated salons</span>
+                    </div>
+                    <div class="register-perk">
+                        <span class="perk-dot"></span>
+                        <span>Get confirmation emails</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="register-left-footer">© @DateTime.Now.Year GlamBook</div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="register-right">
+            <div class="register-eyebrow">Create account</div>
+            <h1 class="register-title">Let's Get <em>Started</em></h1>
+            <p class="register-sub">Fill in your details to create an account</p>
+
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="validation-summary-errors" role="alert"></div>
+
+                <div class="form-field">
+                    <label asp-for="Input.Email" class="form-label">Email</label>
+                    <input asp-for="Input.Email" class="form-input" autocomplete="username"
+                           aria-required="true" placeholder="you@example.com" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-field">
+                    <label asp-for="Input.Password" class="form-label">Password</label>
+                    <input asp-for="Input.Password" class="form-input" autocomplete="new-password"
+                           aria-required="true" placeholder="••••••••" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="form-field">
+                    <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
+                    <input asp-for="Input.ConfirmPassword" class="form-input" autocomplete="new-password"
+                           aria-required="true" placeholder="••••••••" />
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <button id="registerSubmit" type="submit" class="submit-btn">Create Account</button>
+
+                <div class="register-divider"></div>
+
+                <div class="register-links">
+                    <p>Already have an account? <a asp-page="./Login">Sign in</a></p>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.body.addEventListener('click', function(e) {
+            if (!e.target.closest('.register-wrap')) {
+                window.location.href = '/';
+            }
+        });
+    </script>
+</body>
+</html>

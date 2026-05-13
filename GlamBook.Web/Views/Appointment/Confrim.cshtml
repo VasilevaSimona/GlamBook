@@ -1,0 +1,25 @@
+﻿@model GlamBook.Application.DTOs.ServiceDto
+@{
+    var salon = ViewBag.Salon as GlamBook.Application.DTOs.SalonDto;
+}
+
+<h2>Book @Model.Name</h2>
+<h4>@salon!.Name - @salon!.Address</h4>
+
+<form method="post">
+
+    <input type="hidden" name="salonId" value="@salon!.Id" />
+    <input type="hidden" name="serviceId" value="@Model.Id" />
+
+    <div class="mb-3">
+        <label>Select Date</label>
+        <input type="date" name="date" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Select Time</label>
+        <input type="time" name="time" class="form-control" required />
+    </div>
+
+    <button class="btn btn-primary">Confirm Booking</button>
+</form>

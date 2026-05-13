@@ -1,0 +1,529 @@
+﻿@model GlamBook.Application.DTOs.ServiceDto
+
+@{
+    var salon = ViewBag.Salon as GlamBook.Application.DTOs.SalonDto;
+}
+
+<style>
+    .book-wrap {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 24px;
+    }
+
+    .book-card {
+        background: #fff;
+        border-radius: 24px;
+        box-shadow: 0 8px 48px rgba(45, 26, 36, 0.1);
+        padding: 52px 56px;
+        max-width: 640px;
+        width: 100%;
+        animation: fadeUp 0.6s ease both;
+    }
+
+    .book-eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: #e91e8c;
+        margin-bottom: 12px;
+    }
+
+    .book-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 48px;
+        font-weight: 300;
+        color: #2d1a24;
+        line-height: 1;
+        margin-bottom: 8px;
+    }
+
+        .book-title em {
+            font-style: italic;
+            color: #e91e8c;
+        }
+
+    .book-salon {
+        font-size: 12px;
+        color: #9a7080;
+        letter-spacing: 1px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .book-meta {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 36px;
+        flex-wrap: wrap;
+    }
+
+    .book-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #fdf7f4;
+        border: 1px solid rgba(233, 30, 140, 0.15);
+        border-radius: 100px;
+        padding: 6px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #2d1a24;
+    }
+
+        .book-pill.pink {
+            background: rgba(233, 30, 140, 0.06);
+            border-color: rgba(233, 30, 140, 0.2);
+            color: #e91e8c;
+        }
+
+    /* ── DIVIDER ── */
+    .book-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #f48cb6, transparent);
+        margin: 0 0 32px;
+    }
+
+    /* ── SECTION LABEL ── */
+    .book-section-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+        margin-bottom: 16px;
+    }
+
+    /* ── CALENDAR ── */
+    .calendar-wrap {
+        margin-bottom: 32px;
+    }
+
+    .calendar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+    .cal-month {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        font-weight: 400;
+        color: #2d1a24;
+    }
+
+    .cal-nav {
+        background: none;
+        border: 1px solid rgba(233, 30, 140, 0.25);
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #e91e8c;
+        transition: all 0.2s;
+        font-size: 14px;
+    }
+
+        .cal-nav:hover {
+            background: #e91e8c;
+            color: #fff;
+            border-color: #e91e8c;
+        }
+
+    .cal-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+    }
+
+    .cal-day-name {
+        text-align: center;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #9a7080;
+        padding: 6px 0;
+    }
+
+    .cal-day {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 13px;
+        font-weight: 500;
+        color: #2d1a24;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 1.5px solid transparent;
+        background: none;
+    }
+
+        .cal-day:hover:not(.disabled):not(.empty) {
+            border-color: #e91e8c;
+            color: #e91e8c;
+        }
+
+        .cal-day.selected {
+            background: #e91e8c;
+            color: #fff !important;
+            border-color: #e91e8c;
+        }
+
+        .cal-day.today {
+            border-color: rgba(233, 30, 140, 0.3);
+            color: #e91e8c;
+            font-weight: 700;
+        }
+
+        .cal-day.disabled {
+            color: #d4b8c4;
+            cursor: not-allowed;
+        }
+
+        .cal-day.empty {
+            cursor: default;
+        }
+
+    /* ── TIME SLOTS ── */
+    .time-slots {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-bottom: 32px;
+    }
+
+    .time-slot {
+        padding: 10px 6px;
+        border-radius: 10px;
+        border: 1px solid rgba(233, 30, 140, 0.2);
+        background: #fdf7f4;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        color: #2d1a24;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+    }
+
+        .time-slot:hover {
+            border-color: #e91e8c;
+            color: #e91e8c;
+        }
+
+        .time-slot.selected {
+            background: #e91e8c;
+            border-color: #e91e8c;
+            color: #fff;
+        }
+
+    /* ── SELECTED SUMMARY ── */
+    .booking-summary {
+        background: #fdf7f4;
+        border: 1px solid rgba(233, 30, 140, 0.15);
+        border-radius: 14px;
+        padding: 16px 20px;
+        margin-bottom: 24px;
+        font-size: 13px;
+        color: #2d1a24;
+        display: none;
+    }
+
+        .booking-summary.visible {
+            display: block;
+        }
+
+        .booking-summary strong {
+            color: #e91e8c;
+        }
+
+    /* ── CONFIRM BUTTON ── */
+    .book-confirm-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: #e91e8c;
+        color: #fff;
+        padding: 15px 32px;
+        border-radius: 100px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        margin-bottom: 14px;
+    }
+
+        .book-confirm-btn:hover:not(:disabled) {
+            background: #ff4db0;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(233, 30, 140, 0.4);
+        }
+
+        .book-confirm-btn:disabled {
+            background: #d4b8c4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+    .book-back {
+        display: block;
+        text-align: center;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #9a7080;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+        .book-back:hover {
+            color: #e91e8c;
+        }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(24px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .book-card {
+            padding: 36px 24px;
+        }
+
+        .time-slots {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+</style>
+
+<div class="book-wrap">
+    <div class="book-card">
+
+        <div class="book-eyebrow">Confirm your booking</div>
+        <h1 class="book-title"><em>@Model.Name</em></h1>
+
+        @if (salon != null)
+        {
+            <div class="book-salon">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M6 1C4.07 1 2.5 2.57 2.5 4.5C2.5 7.25 6 11 6 11C6 11 9.5 7.25 9.5 4.5C9.5 2.57 7.93 1 6 1Z" stroke="#9a7080" stroke-width="1.2" />
+                    <circle cx="6" cy="4.5" r="1.2" stroke="#9a7080" stroke-width="1.2" />
+                </svg>
+                @salon.Name — @salon.Address
+            </div>
+        }
+
+        <div class="book-meta">
+            <span class="book-pill pink">@Model.Price.ToString("0.00") €</span>
+            <span class="book-pill">@Model.DurationInMinutes min</span>
+        </div>
+
+        <div class="book-divider"></div>
+
+        <form asp-action="Book" asp-controller="Appointment" method="post">
+            <input type="hidden" name="salonId" value="@(salon?.Id ?? 0)" />
+            <input type="hidden" name="serviceId" value="@Model.Id" />
+            <input type="hidden" name="date" id="selectedDate" />
+            <input type="hidden" name="time" id="selectedTime" />
+
+            <!-- CALENDAR -->
+            <div class="calendar-wrap">
+                <p class="book-section-label">Select a date</p>
+                <div class="calendar-header">
+                    <button type="button" class="cal-nav" id="prevMonth">&#8249;</button>
+                    <span class="cal-month" id="calMonthLabel"></span>
+                    <button type="button" class="cal-nav" id="nextMonth">&#8250;</button>
+                </div>
+                <div class="cal-grid" id="calGrid"></div>
+            </div>
+
+            <!-- TIME SLOTS -->
+            <div id="timeSlotsWrap" style="display:none">
+                <p class="book-section-label">Select a time</p>
+                <div class="time-slots" id="timeSlots"></div>
+            </div>
+
+            <!-- SUMMARY -->
+            <div class="booking-summary" id="bookingSummary">
+                You're booking <strong id="summaryService">@Model.Name</strong>
+                on <strong id="summaryDate"></strong> at <strong id="summaryTime"></strong>
+            </div>
+
+            <button type="submit" class="book-confirm-btn" id="confirmBtn" disabled>
+                Confirm Booking
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+            </button>
+        </form>
+
+        <a href="javascript:history.back()" class="book-back">← Go back</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const times = ['09:00','09:30','10:00','10:30','11:00','11:30',
+                       '12:00','12:30','13:00','13:30','14:00','14:30',
+                       '15:00','15:30','16:00','16:30','17:00','17:30'];
+
+        const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        const monthNames = ['January','February','March','April','May','June',
+                            'July','August','September','October','November','December'];
+
+        let current = new Date();
+        current.setDate(1);
+
+        let selectedDateVal = null;
+        let selectedTimeVal = null;
+
+        function renderCalendar() {
+            const year  = current.getFullYear();
+            const month = current.getMonth();
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            document.getElementById('calMonthLabel').textContent =
+                monthNames[month] + ' ' + year;
+
+            const grid = document.getElementById('calGrid');
+            grid.innerHTML = '';
+
+            // Day name headers
+            dayNames.forEach(d => {
+                const el = document.createElement('div');
+                el.className = 'cal-day-name';
+                el.textContent = d;
+                grid.appendChild(el);
+            });
+
+            // Empty cells before first day
+            const firstDay = new Date(year, month, 1).getDay();
+            for (let i = 0; i < firstDay; i++) {
+                const el = document.createElement('div');
+                el.className = 'cal-day empty';
+                grid.appendChild(el);
+            }
+
+            // Days
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            for (let d = 1; d <= daysInMonth; d++) {
+                const date = new Date(year, month, d);
+                const el = document.createElement('button');
+                el.type = 'button';
+                el.className = 'cal-day';
+                el.textContent = d;
+
+                const isPast = date < today;
+                const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+
+                if (isPast || isWeekend) {
+                    el.classList.add('disabled');
+                } else {
+                    if (date.toDateString() === today.toDateString())
+                        el.classList.add('today');
+
+                    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+
+                    if (selectedDateVal === dateStr) el.classList.add('selected');
+
+                    el.addEventListener('click', () => {
+                        document.querySelectorAll('.cal-day').forEach(x => x.classList.remove('selected'));
+                        el.classList.add('selected');
+                        selectedDateVal = dateStr;
+                        document.getElementById('selectedDate').value = dateStr;
+                        showTimeSlots();
+                        updateSummary();
+                    });
+                }
+
+                grid.appendChild(el);
+            }
+        }
+
+        function showTimeSlots() {
+            const wrap = document.getElementById('timeSlotsWrap');
+            const container = document.getElementById('timeSlots');
+            wrap.style.display = 'block';
+            container.innerHTML = '';
+
+            times.forEach(t => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'time-slot';
+                btn.textContent = t;
+
+                if (selectedTimeVal === t) btn.classList.add('selected');
+
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.time-slot').forEach(x => x.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedTimeVal = t;
+                    document.getElementById('selectedTime').value = t + ':00';
+                    updateSummary();
+                });
+
+                container.appendChild(btn);
+            });
+        }
+
+        function updateSummary() {
+            const summary = document.getElementById('bookingSummary');
+            const confirmBtn = document.getElementById('confirmBtn');
+
+            if (selectedDateVal && selectedTimeVal) {
+                const d = new Date(selectedDateVal);
+                const formatted = d.toLocaleDateString('en-GB', { weekday:'long', day:'numeric', month:'long' });
+                document.getElementById('summaryDate').textContent = formatted;
+                document.getElementById('summaryTime').textContent = selectedTimeVal;
+                summary.classList.add('visible');
+                confirmBtn.disabled = false;
+            } else {
+                summary.classList.remove('visible');
+                confirmBtn.disabled = true;
+            }
+        }
+
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            const today = new Date();
+            if (current.getFullYear() === today.getFullYear() &&
+                current.getMonth() === today.getMonth()) return;
+            current.setMonth(current.getMonth() - 1);
+            renderCalendar();
+        });
+
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            current.setMonth(current.getMonth() + 1);
+            renderCalendar();
+        });
+
+        renderCalendar();
+    </script>
+}

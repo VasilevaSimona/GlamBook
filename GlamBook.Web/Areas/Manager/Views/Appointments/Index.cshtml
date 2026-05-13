@@ -1,0 +1,494 @@
+﻿@model IEnumerable<GlamBook.Application.DTOs.AppointmentDto>
+
+<style>
+    .mgr-hero {
+        padding: 48px 48px 32px;
+        border-bottom: 1px solid rgba(233,30,140,0.12);
+        margin-bottom: 40px;
+    }
+
+        .mgr-hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 52px;
+            font-weight: 300;
+            color: #2d1a24;
+            line-height: 1;
+        }
+
+            .mgr-hero h1 em {
+                font-style: italic;
+                color: #e91e8c;
+            }
+
+    .mgr-hero-sub {
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+        margin-top: 8px;
+    }
+
+    .mgr-wrap {
+        padding: 0 48px 80px;
+    }
+
+    .mgr-stats {
+        display: grid;
+        grid-template-columns: repeat(4,1fr);
+        gap: 16px;
+        margin-bottom: 40px;
+    }
+
+    .mgr-stat {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px 24px;
+        box-shadow: 0 2px 16px rgba(45,26,36,0.06);
+        border-left: 3px solid transparent;
+    }
+
+        .mgr-stat.pending {
+            border-color: #ff9800;
+        }
+
+        .mgr-stat.confirmed {
+            border-color: #43a047;
+        }
+
+        .mgr-stat.cancelled {
+            border-color: #e91e8c;
+        }
+
+        .mgr-stat.total {
+            border-color: #1e88e5;
+        }
+
+    .stat-num {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 40px;
+        font-weight: 300;
+        line-height: 1;
+        color: #2d1a24;
+    }
+
+    .stat-lbl {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #9a7080;
+        margin-top: 4px;
+    }
+
+    /* FILTERS */
+    .filters-bar {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px 24px;
+        box-shadow: 0 2px 16px rgba(45,26,36,0.06);
+        margin-bottom: 24px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr auto;
+        gap: 12px;
+        align-items: end;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .filter-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+    }
+
+    .filter-input {
+        padding: 9px 14px;
+        border: 1px solid rgba(233,30,140,0.2);
+        border-radius: 10px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        background: #fdf7f4;
+        color: #2d1a24;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+        .filter-input:focus {
+            border-color: #e91e8c;
+            box-shadow: 0 0 0 3px rgba(233,30,140,0.1);
+        }
+
+    .filter-reset {
+        padding: 9px 20px;
+        border-radius: 100px;
+        border: 1px solid rgba(233,30,140,0.3);
+        background: transparent;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #e91e8c;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .filter-reset:hover {
+            background: #e91e8c;
+            color: #fff;
+        }
+
+    .results-count {
+        font-size: 11px;
+        color: #9a7080;
+    }
+
+    .mgr-table-wrap {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 4px 24px rgba(45,26,36,0.06);
+        overflow: hidden;
+    }
+
+    .mgr-table-header {
+        padding: 20px 28px;
+        border-bottom: 1px solid rgba(233,30,140,0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .mgr-table-title {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #9a7080;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead th {
+        padding: 14px 20px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #9a7080;
+        background: #fdf7f4;
+        text-align: left;
+        border-bottom: 1px solid rgba(233,30,140,0.08);
+    }
+
+    tbody tr {
+        border-bottom: 1px solid rgba(233,30,140,0.06);
+        transition: background 0.2s;
+    }
+
+        tbody tr:hover {
+            background: #fdf7f4;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+    tbody td {
+        padding: 16px 20px;
+        font-size: 13px;
+        color: #2d1a24;
+        vertical-align: middle;
+    }
+
+    .td-service {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 18px;
+    }
+
+    .td-user {
+        font-size: 11px;
+        color: #9a7080;
+    }
+
+    .td-date .date-main {
+        font-weight: 600;
+    }
+
+    .td-date .date-time {
+        font-size: 11px;
+        color: #9a7080;
+        margin-top: 2px;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 100px;
+        padding: 4px 12px;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .badge-pending {
+        background: rgba(255,152,0,.1);
+        color: #e65100;
+        border: 1px solid rgba(255,152,0,.3);
+    }
+
+    .badge-confirmed {
+        background: rgba(67,160,71,.1);
+        color: #2e7d32;
+        border: 1px solid rgba(67,160,71,.3);
+    }
+
+    .badge-cancelled {
+        background: rgba(233,30,140,.08);
+        color: #c0156e;
+        border: 1px solid rgba(233,30,140,.2);
+    }
+
+    .badge-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    .action-btns {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-confirm {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 7px 14px;
+        border-radius: 100px;
+        border: 1px solid rgba(67,160,71,0.4);
+        background: rgba(67,160,71,0.06);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #2e7d32;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-confirm:hover {
+            background: #43a047;
+            border-color: #43a047;
+            color: #fff;
+        }
+
+    .btn-cancel {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 7px 14px;
+        border-radius: 100px;
+        border: 1px solid rgba(233,30,140,0.3);
+        background: rgba(233,30,140,0.04);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #e91e8c;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+        .btn-cancel:hover {
+            background: #e91e8c;
+            border-color: #e91e8c;
+            color: #fff;
+        }
+
+    .empty-row td {
+        text-align: center;
+        padding: 60px 20px;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        font-style: italic;
+        color: #9a7080;
+    }
+
+    tr.hidden-row {
+        display: none;
+    }
+</style>
+
+<div class="mgr-hero">
+    <h1>@ViewBag.SalonName — <em>Appointments</em></h1>
+    <p class="mgr-hero-sub">Manage your salon bookings</p>
+</div>
+
+<div class="mgr-wrap">
+    <div class="mgr-stats">
+        <div class="mgr-stat total">
+            <div class="stat-num">@Model.Count()</div>
+            <div class="stat-lbl">Total</div>
+        </div>
+        <div class="mgr-stat pending">
+            <div class="stat-num">@Model.Count(a => a.Status == "Pending")</div>
+            <div class="stat-lbl">Pending</div>
+        </div>
+        <div class="mgr-stat confirmed">
+            <div class="stat-num">@Model.Count(a => a.Status == "Confirmed")</div>
+            <div class="stat-lbl">Confirmed</div>
+        </div>
+        <div class="mgr-stat cancelled">
+            <div class="stat-num">@Model.Count(a => a.Status == "Cancelled")</div>
+            <div class="stat-lbl">Cancelled</div>
+        </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="filters-bar">
+        <div class="filter-group">
+            <label class="filter-label">Search customer</label>
+            <input type="text" class="filter-input" id="filterEmail" placeholder="email@example.com" oninput="applyFilters()">
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">Status</label>
+            <select class="filter-input" id="filterStatus" onchange="applyFilters()">
+                <option value="">All statuses</option>
+                <option value="Pending">Pending</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label class="filter-label">Date from — to</label>
+            <div style="display:flex; gap:6px;">
+                <input type="date" class="filter-input" id="filterDateFrom" style="flex:1" onchange="applyFilters()">
+                <input type="date" class="filter-input" id="filterDateTo" style="flex:1" onchange="applyFilters()">
+            </div>
+        </div>
+        <button class="filter-reset" onclick="resetFilters()">✕ Reset</button>
+    </div>
+
+    <div class="mgr-table-wrap">
+        <div class="mgr-table-header">
+            <span class="mgr-table-title">All Appointments</span>
+            <span class="results-count" id="resultsCount"></span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Customer</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="appointmentsBody">
+                @if (!Model.Any())
+                {
+                    <tr class="empty-row"><td colspan="5">No appointments yet</td></tr>
+                }
+                @foreach (var a in Model)
+                {
+                    var local = a.StartUtc;
+                    var statusLower = a.Status.ToLower();
+                    <tr data-email="@a.UserEmail.ToLower()"
+                        data-status="@a.Status"
+                        data-date="@local.ToString("yyyy-MM-dd")">
+                        <td><div class="td-service">@a.ServiceName</div></td>
+                        <td><span class="td-user">@a.UserEmail</span></td>
+                        <td>
+                            <div class="td-date">
+                                <div class="date-main">@local.ToString("dd MMM yyyy")</div>
+                                <div class="date-time">@local.ToString("HH:mm")</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge badge-@statusLower">
+                                <span class="badge-dot"></span>@a.Status
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-btns">
+                                @if (a.Status == "Pending")
+                                {
+                                    <form asp-area="Manager" asp-controller="Appointments"
+                                          asp-action="Confirm" method="post" style="display:inline">
+                                        <input type="hidden" name="id" value="@a.Id" />
+                                        <button type="submit" class="btn-confirm">✓ Confirm</button>
+                                    </form>
+                                }
+                                @if (a.Status != "Cancelled")
+                                {
+                                    <form asp-area="Manager" asp-controller="Appointments"
+                                          asp-action="Cancel" method="post" style="display:inline">
+                                        <input type="hidden" name="id" value="@a.Id" />
+                                        <button type="submit" class="btn-cancel">✕ Cancel</button>
+                                    </form>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function applyFilters() {
+        const email  = document.getElementById('filterEmail').value.toLowerCase().trim();
+        const status = document.getElementById('filterStatus').value;
+        const from   = document.getElementById('filterDateFrom').value;
+        const to     = document.getElementById('filterDateTo').value;
+
+        const rows = document.querySelectorAll('#appointmentsBody tr:not(.empty-row)');
+        let visible = 0;
+
+        rows.forEach(row => {
+            const rowEmail  = row.dataset.email  || '';
+            const rowStatus = row.dataset.status || '';
+            const rowDate   = row.dataset.date   || '';
+
+            const matchEmail  = !email  || rowEmail.includes(email);
+            const matchStatus = !status || rowStatus === status;
+            const matchFrom   = !from   || rowDate >= from;
+            const matchTo     = !to     || rowDate <= to;
+
+            if (matchEmail && matchStatus && matchFrom && matchTo) {
+                row.classList.remove('hidden-row');
+                visible++;
+            } else {
+                row.classList.add('hidden-row');
+            }
+        });
+
+        document.getElementById('resultsCount').textContent =
+            visible + ' result' + (visible !== 1 ? 's' : '');
+    }
+
+    function resetFilters() {
+        document.getElementById('filterEmail').value     = '';
+        document.getElementById('filterStatus').value   = '';
+        document.getElementById('filterDateFrom').value = '';
+        document.getElementById('filterDateTo').value   = '';
+        applyFilters();
+    }
+
+    applyFilters();
+</script>
