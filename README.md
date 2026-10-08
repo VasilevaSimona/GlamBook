@@ -67,25 +67,28 @@ The system supports three user roles with different levels of access — regular
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 The project follows **Clean Architecture** principles, organized into 4 layers:
+
+```
 ┌─────────────────────────────────────────┐
-│ GlamBook.Web │
-│ Controllers · Razor Views · Areas │
-│ (Admin, Manager) · Identity UI │
+│         GlamBook.Web                    │
+│  Controllers · Razor Views · Areas      │
+│  (Admin, Manager) · Identity UI         │
 ├─────────────────────────────────────────┤
-│ GlamBook.Application │
-│ Interfaces · DTOs · AutoMapper │
+│         GlamBook.Application            │
+│  Interfaces · DTOs · AutoMapper         │
 ├─────────────────────────────────────────┤
-│ GlamBook.Infrastructure │
-│ Services · EF Core · EmailService │
+│         GlamBook.Infrastructure         │
+│  Services · EF Core · EmailService      │
 ├─────────────────────────────────────────┤
-│ GlamBook.Domain │
-│ Entities · Enums · BaseEntity │
+│         GlamBook.Domain                 │
+│  Entities · Enums · BaseEntity          │
 └─────────────────────────────────────────┘
-↕ External Services
-[SQL Server] [Gmail SMTP]
+          ↕ External Services
+   [SQL Server]        [Gmail SMTP]
+```
 
 
 Each layer depends only on the layer below it — Domain has no external dependencies.
@@ -170,36 +173,36 @@ Automatic emails are sent to users when:
 - 🚫 User cancels their own appointment
 
 ---
+## Project Structure
 
-## 🗂️ Project Structure
+```
 GlamBook/
 ├── GlamBook.Domain/
-│ ├── Entities/
-│ │ ├── AppUser.cs
-│ │ ├── Salon.cs
-│ │ ├── Service.cs
-│ │ ├── Category.cs
-│ │ └── Appointment.cs
-│ ├── Enums/
-│ │ └── AppointmentStatus.cs
-│ └── Common/
-│ └── BaseEntity.cs
+│   ├── Entities/
+│   │   ├── AppUser.cs
+│   │   ├── Salon.cs
+│   │   ├── Service.cs
+│   │   ├── Category.cs
+│   │   └── Appointment.cs
+│   ├── Enums/
+│   │   └── AppointmentStatus.cs
+│   └── Common/
+│       └── BaseEntity.cs
 ├── GlamBook.Application/
-│ ├── DTOs/
-│ ├── Interfaces/
-│ └── Mappings/
+│   ├── DTOs/
+│   ├── Interfaces/
+│   └── Mappings/
 ├── GlamBook.Infrastructure/
-│ ├── Data/
-│ ├── Services/
-│ └── Migrations/
+│   ├── Data/
+│   ├── Services/
+│   └── Migrations/
 └── GlamBook.Web/
-├── Controllers/
-├── Views/
-└── Areas/
-├── Admin/
-└── Manager/
-
-
+    ├── Controllers/
+    ├── Views/
+    └── Areas/
+        ├── Admin/
+        └── Manager/
+```
 ---
 
 ##  Built As
